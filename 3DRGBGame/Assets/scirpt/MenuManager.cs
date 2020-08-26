@@ -53,6 +53,11 @@ public class MenuManager : MonoBehaviour
             imgLoading.fillAmount = ao.progress /0.9f ;                                                                           //載入吧條 = ao.進度
             yield return null;
 
+            if (ao.progress == 0.9f)                                                                                                             //如果 ao.進度 等於0.9
+            {
+                textTip.enabled = true;                                                                                                          //題是文字.啟動 = 是 - 顯示提是文字
+                if (Input.anyKeyDown) ao.allowSceneActivation = true;                                                   //如果按下任意鍵 允許自動載入
+            }
         
         }
     }

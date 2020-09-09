@@ -34,7 +34,7 @@ public class CameraControl : MonoBehaviour
         rot.x += Input.GetAxis("Mouse Y") * turn * Time.deltaTime;                  //利用滑鼠 Y 控制上下角度
         rot.y += Input.GetAxis("Mouse X") * turn * Time.deltaTime;                 //利用滑鼠 X 控制左右角度
 
-        rot.x += Mathf.Clamp(rot.x, limit.y, limit.x);                                            //夾住 X 軸在 限制角度內
+        rot.x = Mathf.Clamp(rot.x, limit.y, limit.x);                                            //夾住 X 軸在 限制角度內
 
         // 將 四元角度 轉為 歐拉角度 (0-360)
         transform.rotation = Quaternion.Euler(rot.x, 180+rot.y, rot.z);

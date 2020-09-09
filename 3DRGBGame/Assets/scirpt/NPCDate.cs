@@ -18,7 +18,7 @@ public class NPCDate : ScriptableObject
 {
 
     [Header("打字速度"), Range(0f, 3f)]
-    public float speed = 0.5f;
+    public float speed = 0.01f;
     [Header ("打字音效")]
     public AudioClip soundType;
     [Header("任務需求數量"), Range(5, 50)]

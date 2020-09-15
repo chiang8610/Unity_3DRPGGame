@@ -21,7 +21,7 @@ public class NPCDate : ScriptableObject
     public float speed = 0.01f;
     [Header ("打字音效")]
     public AudioClip soundType;
-    [Header("任務需求數量"), Range(5, 50)]
+    [Header("任務需求數量"), Range(3, 50)]
     public int count;
     [Header("對話"), TextArea(3, 10)]
     public string[ ] dialogs = new string[3];

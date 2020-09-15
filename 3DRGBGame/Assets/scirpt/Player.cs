@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -14,12 +15,27 @@ public class Player : MonoBehaviour
     public float hp = 250;
     [Header("魔力"), Range(0, 500)]
     public float mp = 50;
+    [Header("吃到具音效")]
+    public AudioClip soundProp;
+    [Header("任務數量")]
+    public Text textMission;
+
+    private int count;
 
     public float exp;
     public int Iv  =1;
 
+    //在屬性面板隱藏
+    [HideInInspector]
+    /// <summary>
+    /// 是否停止
+    /// </summary>
+    public bool stop;
+
     private Animator ani;
     private Rigidbody rig;
+    private AudioSource aud;
+    private NPC npc;
     #endregion
 
     #region 方法:功能
@@ -39,7 +55,22 @@ public class Player : MonoBehaviour
         //動畫.設定浮點數("參數名稱"，前後 + 左右 的 絕對值)
         ani.SetFloat("移動", Mathf.Abs(v) + Mathf.Abs(h));
 
+        if (h != 0 || v != 0)
+        {
+            Quaternion angle = Quaternion.LookRotation(pos);                                                                         //將前往座標資訊轉為角度
+            transform.rotation = Quaternion.Slerp(transform.rotation, angle, turn * Time.fixedDeltaTime);    //角度插植
+        }
     }
+    
+    private void EatProp()
+    {
+        count++;                                                                                                       //遞增
+        textMission.text = "骷髏頭:" + count + "/"+npc.data.count;                      //更新介面
+
+        //如果 數量 等於 NPC需求數量就呼叫 NPC 結束任務
+        if (count == npc.data.count) npc.Finish();   
+    }
+
 
     #endregion
 
@@ -58,8 +89,12 @@ public class Player : MonoBehaviour
 
         ani = GetComponent<Animator>();
         rig = GetComponent<Rigidbody>();
+        aud = GetComponent<AudioSource>();
+
 
         cam = GameObject.Find("攝影機根物件").transform;     //遊戲物件.搜尋("物件名稱") -建議不要在 Update
+
+        npc = FindObjectOfType<NPC>();                                     //取得NPC
     }
     /// <summary>
     /// 固定更新 : 固定 50 FPS     每秒更新50次
@@ -68,10 +103,22 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        if (stop) return;                           // 如果  停止 就跳出
         Move();
 
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "骷髏頭")
+        {
+            aud.PlayOneShot(soundProp);                                     //播放音效
+            Destroy(collision.gameObject);                                    //刪除道具
+            EatProp();                                                                      //呼叫吃到具
 
+        }
+
+    }
 
 
     #endregion

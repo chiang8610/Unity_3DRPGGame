@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [Header("移動速度"), Range(0, 1000)]
     public float speed = 5;
     [Header("旋轉速度"), Range(0, 1000)]
-    public float turn = 5;
+    public float turn = 8;
     [Header("攻擊力"), Range(0, 500)]
     public float attack = 20;
     [Header("血量"), Range(0, 500)]

@@ -19,6 +19,14 @@ public class Player : MonoBehaviour
     public AudioClip soundProp;
     [Header("任務數量")]
     public Text textMission;
+    [Header("吧條")]
+    public Image barHp;
+    public Image barMp;
+    public Image barExp;
+
+    private float maxHp;
+    private float maxMp;
+    private float maxExp;
 
     private int count;
 
@@ -36,6 +44,11 @@ public class Player : MonoBehaviour
     private Rigidbody rig;
     private AudioSource aud;
     private NPC npc;
+
+    /// <summary>
+    /// 攝影機根物件
+    /// </summary>
+    private Transform cam;
     #endregion
 
     #region 方法:功能
@@ -71,13 +84,24 @@ public class Player : MonoBehaviour
         if (count == npc.data.count) npc.Finish();   
     }
 
+    /// <summary>
+    /// 受傷
+    /// </summary>
+    /// <param name="damage">傷害值</param>
+    /// <param name="direction">擊退方向</param>
+    public void Hit(float damage,  Transform direction)
+    {
+
+        hp -= damage;
+        rig.AddForce(direction.forward * 100 + direction.up * 150);
+
+        barHp.fillAmount = hp / maxHp;
+        ani.SetTrigger("受傷觸發");
+
+    }
 
     #endregion
 
-    /// <summary>
-    /// 攝影機根物件
-    /// </summary>
-    private Transform cam;
 
 
     #region 事件:入口
@@ -95,6 +119,9 @@ public class Player : MonoBehaviour
         cam = GameObject.Find("攝影機根物件").transform;     //遊戲物件.搜尋("物件名稱") -建議不要在 Update
 
         npc = FindObjectOfType<NPC>();                                     //取得NPC
+
+        maxHp = hp;
+        maxMp = mp;
     }
     /// <summary>
     /// 固定更新 : 固定 50 FPS     每秒更新50次

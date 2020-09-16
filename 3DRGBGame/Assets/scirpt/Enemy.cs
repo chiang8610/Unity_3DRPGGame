@@ -18,10 +18,18 @@ public class Enemy : MonoBehaviour
     public Transform skull;
     [Header("停止距離:攻擊距離"),Range(0, 10)]
     public float rangeAttack = 1.5f;
+    [Header("攻擊冷卻時間"), Range(0, 10)]
+    public float cd = 3.5f;
+
 
     private NavMeshAgent nma;
     private Animator ani;
     private Player player;
+
+    /// <summary>
+    /// 計時器
+    /// </summary>
+    private float timer;
 
     #endregion
 
@@ -51,8 +59,13 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void Attack()
     {
+        timer += Time.deltaTime;                                           //累加時間
 
-        ani.SetTrigger("攻擊觸發");
+        if(timer >= cd)                                                            //如果 計時器 >= 冷卻時間
+        {
+            timer = 0;                                                               // 計時器歸零
+            ani.SetTrigger("攻擊觸發");                                 // 攻擊動畫
+        }
     }
 
     #endregion
@@ -80,6 +93,18 @@ public class Enemy : MonoBehaviour
         Gizmos.color = new Color(0.8f, 0, 0, 0.5f);
         Gizmos.DrawSphere(transform.position, rangeAttack);
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        print(other.name);
+
+        if( other.name == "瘦長人" )
+            {
+
+            other.GetComponent<Player>().Hit(attack, transform);
+
+        }
     }
     #endregion
 }

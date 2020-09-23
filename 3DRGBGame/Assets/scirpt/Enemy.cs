@@ -96,6 +96,7 @@ public class Enemy : MonoBehaviour
     {
         //this.enabled = false;  //第一種寫法 , this 此腳本
         enabled = false;                                                             //此腳本.啟動= 否
+        GetComponent<Collider>().enabled = false;
         ani.SetBool("死亡開關", true);                                     //死亡動畫
         DropProp();
 

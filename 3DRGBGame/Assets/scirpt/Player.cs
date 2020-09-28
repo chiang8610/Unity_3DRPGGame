@@ -24,6 +24,11 @@ public class Player : MonoBehaviour
     public Image barMp;
     public Image barExp;
     public Text textLv;
+    [Header("技能:流星雨")]
+    public GameObject rock;
+    public Transform pointRock;
+    public float costRock = 20;
+    public float damageRock = 100;
 
     private float maxHp;
     private float maxMp;
@@ -172,6 +177,21 @@ public class Player : MonoBehaviour
 
     }
 
+    private void SkillRock()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse1)  && mp >= costRock)                    //如果  按下 右鍵 並且 魔力 >= 技能消耗
+        {
+            ani.SetTrigger("技能觸發");                                                                           //播放動畫
+            Instantiate(rock, pointRock.position, pointRock.rotation);                             //生成(物件 座標 角度)
+            mp -= costRock;                                                                                              //扣除消耗量
+            barMp.fillAmount = mp / maxMp;                                                                 //更新 魔力 吧條
+
+
+        }
+
+
+    }
+
     #endregion
 
 
@@ -205,6 +225,7 @@ public class Player : MonoBehaviour
             exps[i] = 100 * (i + 1);
         }
     }
+
     /// <summary>
     /// 固定更新 : 固定 50 FPS     每秒更新50次
     /// 有物理運動在這裡呼叫 Rigidbody  剛體有關
@@ -220,7 +241,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Attack();
+        Attack();                                                                   //攻擊
+        SkillRock();                                                             //施放技能
+        Restore(hp, restoreHp , maxHp, barHp);                //恢復血量
+        Restore(mp, restoreMp, maxMp, barMp);              //恢復魔力
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -248,4 +272,34 @@ public class Player : MonoBehaviour
 
 
     #endregion
+
+    [Header("回魔量 / 每秒")]
+    public float restoreMp = 5;
+    [Header("回血量 / 每秒")]
+    public float restoreHp = 10;
+
+
+    private void RestoreMp()
+    {
+        mp += restoreMp * Time.deltaTime;                 //每秒恢復
+        mp = Mathf.Clamp(mp, 0, maxMp);                 //夾住數值(數值，0，最大數值)
+        barMp.fillAmount = mp / maxMp;                    //更新介面
+
+    }
+
+
+    /// <summary>
+    /// 恢復數值
+    /// </summary>
+    /// <param name="value">要恢復的值</param>
+    /// <param name="restore">每秒恢復多少</param>
+    /// <param name="max">要恢復的值最大值</param>
+    /// <param name="bar">要更新的吧條</param>
+    private void Restore(float value, float restore , float max, Image bar)
+    {
+        value += restore * Time.deltaTime;
+        value = Mathf.Clamp(value, 0, max);
+        bar.fillAmount = value / max;
+
+    }
 }

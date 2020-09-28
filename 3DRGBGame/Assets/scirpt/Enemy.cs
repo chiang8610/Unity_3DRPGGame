@@ -73,6 +73,7 @@ public class Enemy : MonoBehaviour
             ani.SetTrigger("攻擊觸發");                                 // 攻擊動畫
         }
     }
+
     /// <summary>
     /// 受傷
     /// </summary>
@@ -90,7 +91,7 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
-    /// 死亡
+    /// 死亡: 關閉腳本 碰撞動畫 呼叫掉道具  傳經驗值給玩家
     /// </summary>
     private void Dead()
     {
@@ -99,8 +100,9 @@ public class Enemy : MonoBehaviour
         GetComponent<Collider>().enabled = false;
         ani.SetBool("死亡開關", true);                                     //死亡動畫
         DropProp();
-
+        player.Exp(exp);                                                            //傳經驗值
     }
+
     /// <summary>
     /// 掉落道具
     /// </summary>

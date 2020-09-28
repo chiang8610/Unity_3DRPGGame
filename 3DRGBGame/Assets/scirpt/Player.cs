@@ -23,15 +23,19 @@ public class Player : MonoBehaviour
     public Image barHp;
     public Image barMp;
     public Image barExp;
+    public Text textLv;
 
     private float maxHp;
     private float maxMp;
-    private float maxExp;
+
 
     private int count;
 
-    public float exp;
-    public int Iv  =1;
+    public float exp;                                //目前經驗值
+    public float maxExp = 100;              //最大經驗值(升級所需要)
+    public int lv  =1;                               //等級
+
+    public float[] exps;                            //浮點數陣列
 
     //在屬性面板隱藏
     [HideInInspector]
@@ -127,6 +131,47 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///經驗值 
+    /// </summary>
+    /// <param name="expGet"></param>
+    public void Exp(float expGet)
+    {
+        exp += expGet;                                               //經驗值累加
+        barExp.fillAmount = exp / maxExp;              //更新經驗值吧條
+
+
+        while (exp >= maxExp) LevelUp();               // 當 目前經驗值 >= 最大經驗值 就 升級 (未達成重複執行，if只會執行一次)
+    }
+
+    private void LevelUp()
+    {
+        lv++;                                                               //等級地增
+        textLv.text = "Lv" + lv;                                  //更新等及介面 
+
+
+        // 升級後數值提升
+        maxHp += 20;
+        maxMp += 5;
+        attack += 10;
+     
+
+        // 升級後血量魔力全滿
+        hp = maxHp;
+        mp = maxHp;
+      
+
+        barHp.fillAmount = 1;
+        barMp.fillAmount = 1;
+
+
+        exp -= maxExp;                                                //把多餘的經驗值補回去 120 -= 100(20)
+        maxExp = exps[lv - 1];                                    //最大經驗值 = 經驗值需求 [等級-1]  (陣烈第一行=0)
+        barExp.fillAmount = exp / maxExp;                //更新經驗值長度 = 目前經驗值 /  最大經驗值
+
+
+    }
+
     #endregion
 
 
@@ -149,6 +194,16 @@ public class Player : MonoBehaviour
 
         maxHp = hp;
         maxMp = mp;
+
+        //經驗值需求 總共有99 筆
+        exps = new float[99];
+
+        //迴圈執行每一筆經驗值需求 = 100*等級
+        //陣列.Length 為陣列的數量 ， 此範例為99
+        for (int i = 0; i < exps.Length; i++)
+        {
+            exps[i] = 100 * (i + 1);
+        }
     }
     /// <summary>
     /// 固定更新 : 固定 50 FPS     每秒更新50次

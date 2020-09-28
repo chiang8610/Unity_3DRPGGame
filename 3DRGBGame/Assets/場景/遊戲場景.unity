@@ -2201,7 +2201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 2400234891239295220, guid: 5b2c232c83913eb4c87c70d3d1c6b6b4, type: 3}
-  interval: 2
+  interval: 2.5
 --- !u!4 &555868430
 Transform:
   m_ObjectHideFlags: 0
@@ -18777,6 +18777,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 850065740}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2071428575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071428576}
+  m_Layer: 8
+  m_Name: "\u6280\u80FD\u5347\u6210\u4F4D\u7F6E"
+  m_TagString: Untagged
+  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2071428576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071428575}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.3, z: 1.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5006512735629288408}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2086734262
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21216,12 +21246,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8296172668901773771}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 1.65, y: 0, z: -40.44}
+  m_LocalPosition: {x: 1.65, y: 0, z: -38.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7775772946219685918}
   - {fileID: 494484983587626927}
   - {fileID: 786501522}
+  - {fileID: 2071428576}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -22992,8 +23023,11 @@ MonoBehaviour:
   barHp: {fileID: 1062780310}
   barMp: {fileID: 130285705}
   barExp: {fileID: 888975403}
+  textLv: {fileID: 912149610}
   exp: 0
-  Iv: 1
+  maxExp: 100
+  lv: 1
+  exps: []
   stop: 0
 --- !u!136 &8296172668901773773
 CapsuleCollider:

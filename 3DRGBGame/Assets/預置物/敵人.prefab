@@ -389,7 +389,7 @@ MonoBehaviour:
   prop: 0.3
   skull: {fileID: 4402354509918761648, guid: b7565d010b79b9948a2015fabea36fc9, type: 3}
   rangeAttack: 1.5
-  cd: 1.5
+  cd: 2
   ture: 3.5
 --- !u!195 &2400234891239658653
 NavMeshAgent:

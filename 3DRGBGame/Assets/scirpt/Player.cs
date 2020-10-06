@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -29,6 +30,11 @@ public class Player : MonoBehaviour
     public Transform pointRock;
     public float costRock = 20;
     public float damageRock = 100;
+
+    [Header("回魔量 / 每秒")]
+    public float restoreMp = 5;
+    [Header("回血量 / 每秒")]
+    public float restoreHp = 10;
 
     private float maxHp;
     private float maxMp;
@@ -123,6 +129,29 @@ public class Player : MonoBehaviour
         enabled = false;                                                             //此腳本.啟動= 否
         ani.SetBool("死亡開關", true);                                     //死亡動畫
 
+        StartCoroutine(Showfinal());                                        //啟動結束畫面協成
+
+    }
+
+    [Header("結束遊戲畫面")]
+    public CanvasGroup final;
+    public Text textFinalTitle;
+
+    private IEnumerator Showfinal()
+    { 
+        yield return new WaitForSeconds(0.5f);                              //等待0.5秒啟動
+
+        textFinalTitle.text = "任務失敗，請重新挑戰";                 //更新標題
+      
+            while (final.alpha<1)                                                        //當 透明度 小於1時累加
+        {
+            final.alpha += 0.5f * Time.deltaTime;
+            yield return null;
+        }
+
+        Cursor.visible = true;                                                               //顯示鼠標
+        final.interactable = true;                                                          //結束畫面可互動
+        final.blocksRaycasts = true;
     }
 
     /// <summary>
@@ -235,6 +264,9 @@ public class Player : MonoBehaviour
     {
 
         if (stop) return;                           // 如果  停止 就跳出
+
+        //如果 第一層的動畫名稱  是  攻擊 或是 技能 就跳出
+        if (ani.GetCurrentAnimatorStateInfo(0).IsName("攻擊") || ani.GetCurrentAnimatorStateInfo(0).IsName("技能")) return;
         Move();
 
     }
@@ -243,8 +275,8 @@ public class Player : MonoBehaviour
     {
         Attack();                                                                   //攻擊
         SkillRock();                                                             //施放技能
-        Restore(hp, restoreHp , maxHp, barHp);                //恢復血量
-        Restore(mp, restoreMp, maxMp, barMp);              //恢復魔力
+        Restore(ref hp, restoreHp , maxHp, barHp);                //恢復血量
+        Restore(ref mp, restoreMp, maxMp, barMp);              //恢復魔力
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -273,12 +305,6 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    [Header("回魔量 / 每秒")]
-    public float restoreMp = 5;
-    [Header("回血量 / 每秒")]
-    public float restoreHp = 10;
-
-
     private void RestoreMp()
     {
         mp += restoreMp * Time.deltaTime;                 //每秒恢復
@@ -287,7 +313,7 @@ public class Player : MonoBehaviour
 
     }
 
-
+    //參數前方加入 ref 會變成傳址，將整筆資料傳過來 ，可以改變傳過來的資料
     /// <summary>
     /// 恢復數值
     /// </summary>
@@ -295,7 +321,7 @@ public class Player : MonoBehaviour
     /// <param name="restore">每秒恢復多少</param>
     /// <param name="max">要恢復的值最大值</param>
     /// <param name="bar">要更新的吧條</param>
-    private void Restore(float value, float restore , float max, Image bar)
+    private void Restore(ref float value, float restore , float max, Image bar)
     {
         value += restore * Time.deltaTime;
         value = Mathf.Clamp(value, 0, max);
